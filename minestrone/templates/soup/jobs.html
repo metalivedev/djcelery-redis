@@ -1,0 +1,31 @@
+{% extends "soup/_skel.html" %}
+
+{% block title %}Jobs{% endblock %}
+
+{% block content %}
+    <h2>Nodes</h2>
+        {% for n in nodes.items %}
+        {# n is a pair with the hostname and the list of active tasks of the node #}
+        <h3>{{ n.0 }}:</h3>
+            <div class="listing">
+                {% if n.1 %}
+                <table>
+                <thead>
+                    <tr><th>Type</th><th>Arguments</th><th>Routing key</th></tr>
+                </thead>
+                <tbody>
+                {% for task in n.1 %}
+                    <tr><td>{{ task.name }}</td><td>{{ task.args }}</td><td>{{ task.delivery_info.routing_key }}</td></tr>
+                {% endfor %}
+                </tbody>
+                </table>
+                {% else %}
+                <em>No active jobs.</em>
+                {% endif %}
+            </div>
+        {% empty %}
+        <div class="listing">
+            <em>No nodes running.</em>
+        </div>
+        {% endfor %}
+{% endblock %}

@@ -1,0 +1,59 @@
+diff -r e7b774dbfd7c .hgignore
+--- a/.hgignore	Wed Feb 15 20:41:57 2012 +0100
++++ b/.hgignore	Mon Nov 12 18:09:15 2012 -0800
+@@ -1,1 +1,3 @@
+ .*\.py(c|o)$
++.*~$
++\#.*#$
+diff -r e7b774dbfd7c dotcloud.yml
+--- a/dotcloud.yml	Wed Feb 15 20:41:57 2012 +0100
++++ b/dotcloud.yml	Mon Nov 12 18:09:15 2012 -0800
+@@ -2,7 +2,7 @@
+     type: python
+ 
+ broker:
+-    type: rabbitmq
++    type: redis
+ 
+ workers:
+     type: python-worker
+diff -r e7b774dbfd7c minestrone/settings.py
+--- a/minestrone/settings.py	Wed Feb 15 20:41:57 2012 +0100
++++ b/minestrone/settings.py	Mon Nov 12 18:09:15 2012 -0800
+@@ -28,14 +28,10 @@
+     }
+ }
+ 
+-# Configure Celery using the RabbitMQ credentials found in the DotCloud
++# Configure Celery using the Redis credentials found in the DotCloud
+ # environment.
+ djcelery.setup_loader()
+-BROKER_HOST = dotcloud_env['DOTCLOUD_BROKER_AMQP_HOST']
+-BROKER_PORT = int(dotcloud_env['DOTCLOUD_BROKER_AMQP_PORT'])
+-BROKER_USER = dotcloud_env['DOTCLOUD_BROKER_AMQP_LOGIN']
+-BROKER_PASSWORD = dotcloud_env['DOTCLOUD_BROKER_AMQP_PASSWORD']
+-BROKER_VHOST = '/'
++BROKER_URL = dotcloud_env['DOTCLOUD_BROKER_REDIS_URL']
+ 
+ # A very simple queue, just to illustrate the principle of routing.
+ CELERY_DEFAULT_QUEUE = 'default'
+diff -r e7b774dbfd7c minestrone/templates/soup/_skel.html
+--- a/minestrone/templates/soup/_skel.html	Wed Feb 15 20:41:57 2012 +0100
++++ b/minestrone/templates/soup/_skel.html	Mon Nov 12 18:09:15 2012 -0800
+@@ -2,7 +2,7 @@
+ <html>
+ <head>
+     <meta charset="utf-8">
+-    <meta name="description" content="Django Celery and RabbitMQ on DotCloud" />
++    <meta name="description" content="Django Celery and Redis on DotCloud" />
+     <meta name="keywords" content="python,celery,dotcloud,django" />
+     <meta name="author" content="Louis Opter <louis@dotcloud.com>" />
+ 
+diff -r e7b774dbfd7c requirements.txt
+--- a/requirements.txt	Wed Feb 15 20:41:57 2012 +0100
++++ b/requirements.txt	Mon Nov 12 18:09:15 2012 -0800
+@@ -1,3 +1,3 @@
+ Django
+-django-celery
++django-celery-with-redis
+ setproctitle

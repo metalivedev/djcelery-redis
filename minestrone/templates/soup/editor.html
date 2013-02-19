@@ -1,0 +1,24 @@
+{% extends "soup/_skel.html" %}
+
+{% block title %}Editor{% endblock %}
+
+{% block content %}
+    <h2>Add a job</h2>
+
+    <div class="editor">
+        <form action="/editor/" method="post" accept-charset="utf-8" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        {% for field in form %}
+        <div class="field">
+            {{ field.errors }}
+            {{ field.label_tag }} {{ field }}
+        </div>
+        {% endfor %}
+
+        <div class="field">
+            <input type="submit" name="submit" value="Enqueue" id="button" />
+        </div>
+        </form>
+    </div>
+{% endblock %}

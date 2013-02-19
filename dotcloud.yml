@@ -1,0 +1,11 @@
+www:
+    type: python
+
+broker:
+    type: redis
+
+workers:
+    type: python-worker
+
+db:
+    type: postgresql
